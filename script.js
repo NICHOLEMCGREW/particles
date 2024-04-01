@@ -21,7 +21,7 @@ ctx.font = '30px Verdana'
 ctx.fillText('A', 0, 30)
 // ctx.strokeStyle = 'white'
 // ctx.strokeRect(0, 0, 100, 100)
-const data = ctx.getImageData(0, 0, 100, 100)
+const textCoordinates = ctx.getImageData(0, 0, 100, 100)
 
 class Particle {
     constructor(x, y){
@@ -68,11 +68,16 @@ update() {
 
 function init() {
     particleArray = []
-    for (let i = 0; i < 1000; i++) {
-        let x = Math.random() * canvas.width
-        let y = Math.random() * canvas.height
-        particleArray.push(new Particle(x, y))
+    for (let y = 0, y2 = textCoordinates.height; y < y2; y++) {
+        for (let x = 0; x2 = textCoordinates.width; x < x2; x++) {
+            
+        }
     }
+    // for (let i = 0; i < 1000; i++) {
+    //     let x = Math.random() * canvas.width
+    //     let y = Math.random() * canvas.height
+    //     particleArray.push(new Particle(x, y))
+    // }
     // particleArray.push(new Particle(200, 200))
     // particleArray.push(new Particle(300, 300))
 }
