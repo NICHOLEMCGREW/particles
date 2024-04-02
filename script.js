@@ -3,8 +3,8 @@ const ctx = canvas.getContext('2d')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 let particleArray = []
-let adjustX = 6
-let adjustY = 0
+let adjustX = 2
+let adjustY = -9
 
 //handle mouse
 const mouse = {
@@ -18,9 +18,9 @@ window.addEventListener('mousemove', function(event){
     mouse.y = event.y
 })
 
-ctx.fillStyle = 'white'
-ctx.font = '25px Verdana'
-ctx.fillText('TicketMate', 0, 30)
+ctx.fillStyle = 'purple'
+ctx.font = '10px Verdana'
+ctx.fillText('TicketMate', 0, 20)
 // ctx.strokeStyle = 'white'
 // ctx.strokeRect(0, 0, 100, 100)
 const textCoordinates = ctx.getImageData(0, 0, 100, 100)
@@ -29,13 +29,13 @@ class Particle {
     constructor(x, y){
         this.x = x
         this.y = y
-        this.size = 3
+        this.size = 5
         this.baseX = this.x
         this.baseY = this.y
         this.density = (Math.random() * 40) + 5
 }
 draw(){
-    ctx.fillStyle = 'white'
+    ctx.fillStyle = 'purple'
     ctx.beginPath()
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
     ctx.closePath()
@@ -75,7 +75,7 @@ function init() {
             if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
                 let positionX = x + adjustX
                 let positionY = y + adjustY
-                particleArray.push(new Particle(positionX * 20, positionY * 20))
+                particleArray.push(new Particle(positionX * 10, positionY * 10))
             }
         }
     }
@@ -104,10 +104,10 @@ function connect() {
             let dx = particleArray[a].x - particleArray[b].x
             let dy = particleArray[a].y - particleArray[b].y
             let distance = Math.sqrt(dx * dx + dy * dy)
-            opacityValue = 1 - (distance/50)
+            opacityValue = 1 - (distance/5)
                 ctx.stokeStyle = 'rgba(255,255,255,' + opacityValue + ')'
 
-            if (distance < 50) {
+            if (distance < 5) {
                 
                 ctx.lineWidth = 2
                 ctx.beginPath()
