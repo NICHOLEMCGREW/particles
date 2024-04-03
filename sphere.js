@@ -1,9 +1,5 @@
 let scene = new THREE.Scene();
-document.addEventListener('mousemove', onMouseMove, false);
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-let mouseX;
-let mouseY;
-
 let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -14,13 +10,11 @@ window.addEventListener('resize', function () {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-let distance = Math.min(200, window.innerWidth / 4);
+let distance = Math.min(15, window.innerWidth / 3); // Adjusted distance for smaller size
 let geometry = new THREE.Geometry();
 
-for (let i = 0; i < 1600; i++) {
-
+for (let i = 0; i < 800; i++) { // Reduced number of particles
     let vertex = new THREE.Vector3();
-
     let theta = THREE.Math.randFloatSpread(360);
     let phi = THREE.Math.randFloatSpread(360);
 
@@ -33,9 +27,9 @@ for (let i = 0; i < 1600; i++) {
 
 let particles = new THREE.Points(geometry, new THREE.PointsMaterial({
     color: 0xff44ff,
-    size: 2
+    size: 0.5 // Adjusted particle size for smaller size
 }));
-particles.boundingSphere = 50;
+particles.boundingSphere = 25; // Adjusted bounding sphere size
 
 let renderingParent = new THREE.Group();
 renderingParent.add(particles);
@@ -44,7 +38,29 @@ let resizeContainer = new THREE.Group();
 resizeContainer.add(renderingParent);
 scene.add(resizeContainer);
 
-camera.position.z = 400;
+// Load the font
+const fontLoader = new THREE.FontLoader();
+fontLoader.load('https://cdn.jsdelivr.net/npm/three/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+    // Adding text "TicketMate" with loaded font
+    const textGeometry = new THREE.TextGeometry('TicketMate', {
+        font: font,
+        size: 3.5, // Adjusted text size for bigger size
+        height: 0.1, // Adjusted text height for smaller size
+        curveSegments: 12,
+        bevelEnabled: false
+    });
+    textGeometry.computeBoundingBox();
+    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff }); // Change color here
+    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+    textMesh.position.set(
+        -0.5 * (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x), // Center horizontally
+        -0.5 * (textGeometry.boundingBox.max.y - textGeometry.boundingBox.min.y), // Center vertically
+        0 // Center along z-axis
+    );
+    scene.add(textMesh);
+});
+
+camera.position.z = 100; // Adjusted camera position for smaller size
 
 let animate = function () {
     requestAnimationFrame(animate);
@@ -56,16 +72,18 @@ function onMouseMove(event) {
     if (myTween)
         myTween.kill();
 
-    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-    mouseY = (event.clientY / window.innerHeight) * 2 - 1;
+    let mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+    let mouseY = (event.clientY / window.innerHeight) * 2 - 1;
     myTween = gsap.to(particles.rotation, { duration: 0.1, x: mouseY * -1, y: mouseX });
 }
+
+document.addEventListener('mousemove', onMouseMove, false);
 
 animate();
 
 let animProps = { scale: 1, xRot: 0, yRot: 0 };
 gsap.to(animProps, {
-    duration: 10, scale: 1.3, repeat: -1, yoyo: true, ease: 'sine', onUpdate: function () {
+    duration: 10, scale: 0.8, repeat: -1, yoyo: true, ease: 'sine', onUpdate: function () { // Adjusted scale for smaller size
         renderingParent.scale.set(animProps.scale, animProps.scale, animProps.scale);
     }
 });
